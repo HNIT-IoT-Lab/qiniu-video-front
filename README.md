@@ -1,7 +1,37 @@
-# Vue 3 + Vite
+# Qiniu-Video-front
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+A project imitate ticktok ,  mostly focus on the feature of video waterfall player
+
+## Feature
+- **Video player**: play, pause, progress bar drag
+- **Content classification**: Video content classification page
+- **Video switching**: Use up and down keys to switch video
 
 ## Recommended IDE Setup
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Stylelint]( https://marketplace.visualstudio.com/items?itemName=stylelint.vscode-stylelint)
+
+## Install and use
+- Get the project code
+```bash
+git clone https://github.com/HNIT-IoT-Lab/qiniu-video-front.git
+```
+- Installation dependencies
+
+```bash
+npm install -g pnpm
+
+cd qiniu-video-front
+
+pnpm install
+```
+
+- run
+```bash
+pnpm dev
+```
+
+- build
+```bash
+pnpm build
+```
