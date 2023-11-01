@@ -5,8 +5,8 @@
 		}
 	],
 	"settings": {
-		"files.autoSave": "afterDelay",
-		// "editor.formatOnSave": false,
+		"files.autoSave": "off",
+		"editor.formatOnSave": false,
 		"eslint.format.enable": true,
 		"eslint.run": "onType",
 		//配置 ESLint 检查的文件类型
