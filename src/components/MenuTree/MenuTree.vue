@@ -1,10 +1,10 @@
 <template>
     <a-menu v-for="(value, key) in menuList" :key="key" :default-selected-keys="['homePage']" :style="{ width: '100%' }"
             @menuItemClick="onClickMenuItem">
-        <template v-for="(item,index) in value"  :key="item.name">
-            <a-menu-item >
+        <template v-for="(item, index) in value" :key="item.name">
+            <a-menu-item>
                 <!-- <IconHome /> -->
-                {{item.meta.title}}
+                {{ item.meta.title }}
             </a-menu-item>
         </template>
     </a-menu>
@@ -41,5 +41,4 @@ onMounted(() => {
   console.log(menuList);
 });
 </script>
-<style lang="less">
-</style>
+<style lang="less"></style>
