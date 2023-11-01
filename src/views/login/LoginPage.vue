@@ -1,11 +1,25 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
+import { sendSms, smsLogin } from '@/api/user';
+import { useUserStore } from '@/store/user';
+import { useRoute, useRouter } from 'vue-router';
 
 const isgx = ref(false); // 大div的类名
 const istxr = ref(false);
 const ishidden = ref(false);
 const istxl = ref(false);
 const isz = ref(false);
+const codeDisabled = ref(false); // 验证码按钮禁用
+const isSendCode = ref(false);
+
+const form = reactive({
+  phoneNumber: '',
+  code: ''
+});
+
+const store = useUserStore();
+const route = useRoute();
+const router = useRouter();
 
 const toggle = (className) => {
   className.value = !className.value;
@@ -25,8 +39,30 @@ const changeForm = () => {
   toggle(isz);
 };
 
-const getLoginBtn = () => {
-  console.log('ok');
+const sendCode = async () => {
+  if (!form.phoneNumber) return null;
+  codeDisabled.value = true;
+  setTimeout(() => {
+    codeDisabled.value = false;
+    isSendCode.value = true;
+    console.log('keyi');
+  }, 30000);
+  //   console.log('form.phoneNumber', form.phoneNumber);
+  await sendSms(form.phoneNumber);
+  isSendCode.value = true;
+};
+
+const getLoginBtn = async () => {
+  if (!form.phoneNumber || !form.code) return null;
+  const res = await smsLogin(form.phoneNumber, form.code);
+  console.log('res 登录', res);
+  store.setToken(res.token);
+
+  console.log('route', route.query.returnUrl);
+//   eslint-disable-next-line
+  router.push({
+    path: (route.query.returnUrl as string) ? (route.query.returnUrl as string) : '/'
+  });
 };
 
 const getRegisterBtn = (e) => {
@@ -52,10 +88,33 @@ onMounted(() => {
                         <i class="iconfont icon-bilibili-line"></i>
                     </div>
                     <span class="form_span">手机验证码登录</span>
-                    <input type="text" class="form_input" placeholder="手机号"/>
+                    <!-- <input type="text" class="form_input" placeholder="手机号"/>
                     <input type="text" class="form_input" placeholder="Password"/>
                     <a class="form_link">忘记密码？</a>
-                    <button class="form_button button submit" @click="getLoginBtn">登录</button>
+                    <button class="form_button button submit" @click="getLoginBtn">登录</button> -->
+                    <a-form :model="form" :style="{ width: '600px' }" @submit="getLoginBtn">
+                        <a-form-item field="phoneNumber">
+                            <a-input
+                                v-model="form.phoneNumber"
+                                placeholder="手机号"
+                                class="form_input phoneNumber"
+                            />
+
+                        </a-form-item>
+                        <a-form-item field="code" class="code-item">
+                            <a-input v-model="form.code" placeholder="验证码" class="form_input" />
+                            <a-link @click="sendCode" class="form_link code" :disabled="codeDisabled">{{ isSendCode ? '已发送':'发送验证码' }}</a-link>
+                        </a-form-item>
+                        <a-form-item>
+                            <a-link href="link" class="form_link forget-pwd">忘记密码？</a-link>
+                        </a-form-item>
+                        <!-- <a-form-item>
+                            <a class="form_link">忘记密码？</a>
+                        </a-form-item> -->
+                        <a-form-item class="loginItem">
+                            <a-button class="form_button button submit login" html-type="submit">登录</a-button>
+                        </a-form-item>
+                    </a-form>
                 </form>
             </div>
             <div :class="['container','b-container',istxl ? 'is-txl':'',isz ? 'is-z': '']" id="b-container">
@@ -87,7 +146,7 @@ onMounted(() => {
                 <!-- switch-c1 -->
                 <div :class="['switch_container',ishidden ? 'is-hidden':'']" id="switch-c1">
                     <h2 class="switch_title title" style="letter-spacing: 0;">Hello Friend！</h2>
-                    <p class="switch_description description">去注册一个账号，成为尊贵的粉丝会员，让我们踏入奇妙的旅途！</p>
+                    <p class="switch_description description">去注册一个账号吧，让我们一起探索奇妙的旅途！</p>
                     <button class="switch_button button switch-btn" @click="changeForm">注册</button>
                 </div>
             </div>
@@ -106,6 +165,7 @@ onMounted(() => {
 }
 
 .login-page{
+    --font--color: #a0a5a8;
     width: 100%;
     height: 100vh;
     display: flex;
@@ -168,10 +228,14 @@ onMounted(() => {
         .form {
             display: flex;
             justify-content: center;
-            align-items: center;
+
             flex-direction: column;
             width: 100%;
             height: 100%;
+        }
+
+        :deep(.form){
+            align-items: center;
         }
 
         .iconfont {
@@ -213,13 +277,32 @@ onMounted(() => {
             margin-top: 30px;
             margin-bottom: 12px;
         }
-
+        // link 的标准样式
         .form_link {
+            box-sizing: border-box;
             color: #181818;
             font-size: 15px;
+            // margin-top: 25px;
+            // line-height: 2;
+        }
+
+        .code-item{
+            position: relative;
+        }
+        .code{
+            position: absolute;
+            top: 50%;
+            right: 150px;
+            transform: translateY(-50%);
+            color: var(--font--color);
+        }
+        .forget-pwd{
             margin-top: 25px;
-            border-bottom: 1px solid #a0a5a8;
-            line-height: 2;
+        }
+
+        .arco-link:hover{
+            color: #95b0c5;
+            background-color: #ecf0f3;
         }
 
         .title {
@@ -318,6 +401,15 @@ onMounted(() => {
             box-shadow: 6px 6px 10px #d1d9e6, -6px -6px 10px #f9f9f9;
             transform: scale(0.985);
             transition: 0.25s;
+        }
+
+        // 登录
+        :deep(.loginItem .arco-form-item-content-flex){
+            position: relative;
+        }
+        .login{
+            position: absolute;
+            left: 20%;
         }
 
         .switch_button:active,

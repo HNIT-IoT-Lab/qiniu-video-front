@@ -5,6 +5,6 @@ import { post } from '@/utils/request';
  * @param phoneNumber 用户手机号
  */
 export default async function sendSms (phoneNumber) {
-  const respons = await post('/user/sendSmsCode', { phoneNumber });
-  return respons;
+  const response = await post('/user/sendSmsCode', { phoneNumber });
+  return response;
 }

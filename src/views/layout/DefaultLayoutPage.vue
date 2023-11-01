@@ -5,8 +5,18 @@
             <MenuTree />
         </a-layout-sider>
         <a-layout>
-            <a-layout-header style="padding-left: 20px;height: 80px;">
-                Header
+            <a-layout-header class="layout-header">
+                <div class="header-logo">logo</div>
+                <div class="search">
+                    <a-input-search :style="{width:'320px'}" placeholder="Please enter something" search-button>
+                        <template #button-icon>
+                            <icon-search/>
+                        </template>
+                        <template #button-default>
+                            Search
+                        </template>
+                    </a-input-search>
+                </div>
             </a-layout-header>
             <a-layout style="padding: 0 24px;">
                 <a-layout-content class="layout-content">
@@ -72,6 +82,14 @@ export default defineComponent({
   z-index: 100;
   width: 100%;
   height: @nav-size-height;
+}
+
+.layout-header{
+  display: flex;
+  padding-left: 20px;
+  height: 66px;
+  line-height: 66px;
+  background: #e1e5e9;
 }
 
 .layout-sider {
