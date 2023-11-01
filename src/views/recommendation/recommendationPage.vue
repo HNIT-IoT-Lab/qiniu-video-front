@@ -4,26 +4,33 @@
         :slidesPerView="1"
         :spaceBetween="30"
         :mousewheel="true"
-        :pagination="{
-            clickable: true,
-        }"
+        :loop="true"
         :modules="modules"
         class="my-swiper"
         :auto-height="true"
         @swiper="onSwiper"
-        @slideChange="onSlideChange"
+        @slideChangeTransitionEnd="onSlideChangeEnd"
     >
         <template v-for="(item,index) in dataList" :key="index">
-            <swiper-slide >
+            <swiper-slide>
                 <video-player
-                    ref="videoPlayers"
-                    src="https://media.w3.org/2010/05/sintel/trailer.mp4"
+                    class="swiper-no-swiping"
+                    :id="index.toString()"
+                    :src="item.url"
                     controls
-                    poster="//vjs.zencdn.net/v/oceans.png"
                     :loop="true"
                     :volume="0.6"
                     preload="auto"
                     style="width: 100%;height: 100%;"
+                    @mounted="handleMounted"
+                    :muted="true"
+                    :userActions="{
+                        doubleClick: false
+                    }"
+                    :controlBar="{
+                        fullscreenToggle: false
+                    }
+                    "
                 />
             </swiper-slide>
         </template>
@@ -38,29 +45,62 @@ import 'swiper/css/pagination';
 // import required modules
 import { Mousewheel, Autoplay } from 'swiper/modules';
 import { VideoPlayer } from '@videojs-player/vue';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, shallowRef } from 'vue';
 import 'video.js/dist/video-js.css';
-import videojs from 'video.js';
-const modules = [Mousewheel, Autoplay];
 
+const player = shallowRef([]);
 const dataList = [{
-  url: 'https://media.w3.org/2010/05/sintel/trailer.mp4'
+  url: 'https://vjs.zencdn.net/v/oceans.mp4'
 }, {
-  url: 'https://media.w3.org/2010/05/sintel/trailer.mp4'
+  url: 'http://www.w3school.com.cn/example/html5/mov_bbb.mp4'
+}, {
+  url: 'https://www.w3schools.com/html/movie.mp4'
 }];
-const onSwiper = (swiper) => {
-  console.log(swiper);
+// 获取视频实例
+const handleMounted = async (payload) => {
+  const index = player.value.length;
+  player.value.push(payload.player);
+  payload.player.on('volumechange', (events) => {
+    for (let i = 0; i < 3; i++) {
+      if (index !== i) {
+        if (!player.value[index].muted()) {
+          player.value[i].muted(false);
+        }
+        player.value[i].volume(player.value[index].volume());
+      }
+      // console.log(player.value[i].volume());
+    }
+  });
+  payload.player.on('play', (events) => {
+
+    // player.value[1].update();
+  });
 };
-const onSlideChange = () => {
-//   videoPlayers.value[1].play();
-  console.log(videoPlayers.value[1].pl);
+
+const modules = [Mousewheel, Autoplay];
+const onSwiper = (swiper) => {
+  // console.log('onSwiper', swiper);
+};
+let realIndex = 0;
+// 滑动结束事件
+const onSlideChangeEnd = async (swiper) => {
+  console.log('realIndex', swiper.realIndex);
+  realIndex = swiper.realIndex;
+  console.log(player.value[realIndex]);
+  await player.value[realIndex].play();
+  for (let i = 0; i < 3; i++) {
+    if (i !== realIndex) {
+      await player.value[i].pause();
+    }
+  }
+  //   videoPlayers.value[1].play();
+  // console.log(player.value);
 //   console.log('slide change');
 };
 
-onMounted(() => {
-
+onMounted(async () => {
+  await player.value[0].play();
 });
-const videoPlayers = ref(null);
 </script>
 <style scoped lang="less">
 .my-swiper{
