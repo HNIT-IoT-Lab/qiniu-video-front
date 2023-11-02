@@ -5,7 +5,7 @@
 		}
 	],
 	"settings": {
-		"files.autoSave": "off",
+		"files.autoSave": "afterDelay",
 		"editor.formatOnSave": false,
 		"eslint.format.enable": true,
 		"eslint.run": "onType",

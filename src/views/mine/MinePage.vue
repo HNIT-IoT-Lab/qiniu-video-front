@@ -1,5 +1,6 @@
 <script setup>
 import avatar from '@/assets/img/avatar.jpg';
+import CpIcon from '@/components/CpIcon/CpIcon.vue';
 
 const changeContent = () => {
 
@@ -21,8 +22,9 @@ const changeContent = () => {
                 <div class="nickname">理香</div>
                 <div class="userid">用户id: &nbsp;9976543</div>
                 <div class="descript">个人简介</div>
-                <div class="sex">女</div>
-                <cp-icon name="appreciate_fill_light"/>
+                <div class="sex">
+                    <CpIcon name="female"/>
+                </div>
                 <div class="behavior-data-all">
                     <div class="behavior-data"><span>45</span>关注 </div>
                     <div class="behavior-data"><span>15</span> 粉丝<span></span></div>

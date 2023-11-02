@@ -14,7 +14,9 @@ const DEFAULT = [
         // role: ["user", "admin"],
         meta: {
           title: '首页',
-          order: 0
+          order: 0,
+          icon: 'home',
+          iconfill: 'home_fill'
         }
       },
       {
@@ -24,7 +26,9 @@ const DEFAULT = [
         // role: ["user", "admin"],
         meta: {
           title: '推荐',
-          order: 1
+          order: 1,
+          icon: 'favor_light',
+          iconfill: 'favor_fill_light'
         }
       },
       {
@@ -34,7 +38,9 @@ const DEFAULT = [
         // role: ["user", "admin"],
         meta: {
           title: '关注',
-          order: 2
+          order: 2,
+          icon: 'friend_add',
+          iconfill: 'friend_add_fill'
         }
       },
       {
@@ -43,7 +49,9 @@ const DEFAULT = [
         component: () => import('@/views/mine/MinePage.vue'),
         meta: {
           title: '我的',
-          order: 3
+          order: 3,
+          icon: 'people',
+          iconfill: 'people_fill'
         }
       }
     ]

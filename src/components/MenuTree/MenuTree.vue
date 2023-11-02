@@ -3,7 +3,7 @@
             @menuItemClick="onClickMenuItem">
         <template v-for="(item, index) in value" :key="item.name">
             <a-menu-item>
-                <!-- <IconHome /> -->
+                <CpIcon :name="item.meta.icon"/>
                 {{ item.meta.title }}
             </a-menu-item>
         </template>
@@ -19,6 +19,7 @@ import {
 } from '@arco-design/web-vue/es/icon';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import CpIcon from '../CpIcon/CpIcon.vue';
 const router = useRouter();
 const menuList = computed(() => {
   const menuListTemp = {};
@@ -49,4 +50,14 @@ onMounted(() => {
   updateMenuSelected();
 });
 </script>
-<style lang="less"></style>
+<style lang="less">
+.arco-menu-item{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .cp-icon{
+    margin-right: 14px;
+  }
+}
+
+</style>

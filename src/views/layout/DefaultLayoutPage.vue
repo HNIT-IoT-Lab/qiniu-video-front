@@ -10,7 +10,7 @@
                 <div class="search">
                     <a-input-search :style="{width:'320px'}" placeholder="Please enter something" search-button>
                         <template #button-icon>
-                            <icon-search/>
+                            <!-- <icon-search/> -->
                         </template>
                         <template #button-default>
                             Search
