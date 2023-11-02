@@ -5,9 +5,11 @@
             <MenuTree/>
         </a-layout-sider>
         <a-layout>
-            <a-layout-header style="padding-left: 20px;height: 80px;">
-                Header
-            </a-layout-header>
+            <a-affix :offsetTop="10">
+                <a-layout-header style="padding-left: 20px;height: 80px;">
+                    Header
+                </a-layout-header>
+            </a-affix>
             <a-layout style="padding: 0 24px;">
                 <a-layout-content class="layout-content">
                     <RouterView/>
@@ -121,5 +123,6 @@ export default defineComponent({
 
 .layout-content {
     display: flex;
+    flex-direction: column;
   }
 </style>
