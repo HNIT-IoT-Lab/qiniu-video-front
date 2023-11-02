@@ -19,7 +19,7 @@ const DEFAULT = [{
     {
       path: 'recommendation',
       name: 'recommendationPage',
-      component: () => import('@/views/home/HomePage.vue'),
+      component: () => import('@/views/recommendation/recommendationPage.vue'),
       // role: ["user", "admin"],
       meta: {
         title: '推荐',

@@ -1,5 +1,5 @@
 <template>
-    <a-menu v-for="(value, key) in menuList" :key="key" :default-selected-keys="['homePage']" :style="{ width: '100%' }"
+    <a-menu v-for="(value, key) in menuList" :key="key" :selected-keys="currentSelectKeys" :style="{ width: '100%' }"
             @menuItemClick="onClickMenuItem">
         <template v-for="(item, index) in value" :key="item.name">
             <a-menu-item>
@@ -17,7 +17,7 @@ import {
 //   IconHome,
 //   IconCalendar
 } from '@arco-design/web-vue/es/icon';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 const router = useRouter();
 const menuList = computed(() => {
@@ -33,12 +33,18 @@ const menuList = computed(() => {
   return menuListTemp;
 });
 
+function updateMenuSelected () {
+  currentSelectKeys.value = [router.currentRoute.value.name];
+}
 async function onClickMenuItem (key) {
   await router.push({ name: key });
+  updateMenuSelected();
 }
 
+const currentSelectKeys = ref(['homePage']);
+
 onMounted(() => {
-  console.log(menuList);
+  updateMenuSelected();
 });
 </script>
 <style lang="less"></style>

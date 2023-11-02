@@ -5,14 +5,14 @@
             <MenuTree/>
         </a-layout-sider>
         <a-layout>
-            <a-layout-header style="padding-left: 20px;">
+            <a-layout-header style="padding-left: 20px;height: 80px;">
                 Header
             </a-layout-header>
             <a-layout style="padding: 0 24px;">
-                <a-layout-content>
+                <a-layout-content class="layout-content">
                     <RouterView/>
                 </a-layout-content>
-                <a-layout-footer>Footer</a-layout-footer>
+                <a-layout-footer style="height: 40px;">Footer</a-layout-footer>
             </a-layout>
         </a-layout>
     </a-layout>
@@ -61,6 +61,7 @@ export default defineComponent({
 .layout {
     width: 100%;
     height: 100%;
+    // overflow-y: hidden;
 }
 
 .layout-navbar {
@@ -119,9 +120,6 @@ export default defineComponent({
   }
 
 .layout-content {
-    min-height: 100vh;
-    overflow-y: hidden;
-    background-color: var(--color-fill-2);
-    transition: padding 0.2s cubic-bezier(0.34, 0.69, 0.1, 1);
+    display: flex;
   }
 </style>
