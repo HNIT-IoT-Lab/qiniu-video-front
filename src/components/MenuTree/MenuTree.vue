@@ -1,5 +1,5 @@
 <template>
-    <a-menu v-for="(value, key) in menuList" :key="key" :selected-keys="currentSelectKeys"  :style="{ width: '100%' }"
+    <a-menu v-for="(value, key) in menuList" :key="key" :selected-keys="currentSelectKeys" :style="{ width: '100%' }"
             @menuItemClick="onClickMenuItem">
         <template v-for="(item, index) in value" :key="item.name">
             <a-menu-item>
