@@ -105,9 +105,9 @@ onMounted(() => {
                             <a-input v-model="form.code" placeholder="验证码" class="form_input" />
                             <a-link @click="sendCode" class="form_link code" :disabled="codeDisabled">{{ isSendCode ? '已发送':'发送验证码' }}</a-link>
                         </a-form-item>
-                        <a-form-item>
+                        <!-- <a-form-item>
                             <a-link href="link" class="form_link forget-pwd">忘记密码？</a-link>
-                        </a-form-item>
+                        </a-form-item> -->
                         <!-- <a-form-item>
                             <a class="form_link">忘记密码？</a>
                         </a-form-item> -->
@@ -248,11 +248,11 @@ onMounted(() => {
             transition: 0.1s;
         }
 
-        .iconfont:hover {
-            opacity: 1;
-            transition: 0.15s;
-            cursor: pointer;
-        }
+        // .iconfont:hover {
+        //     opacity: 1;
+        //     transition: 0.15s;
+        //     cursor: pointer;
+        // }
 
         .form_input {
             width: 350px;

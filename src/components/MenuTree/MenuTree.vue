@@ -1,10 +1,15 @@
 <template>
-    <a-menu v-for="(value, key) in menuList" :key="key" :selected-keys="currentSelectKeys"  :style="{ width: '100%' }"
+    <a-menu v-for="(value, key) in menuList" :key="key" :selected-keys="currentSelectKeys"  style=" width: 150px"
             @menuItemClick="onClickMenuItem">
         <template v-for="(item, index) in value" :key="item.name">
             <a-menu-item>
-                <CpIcon :name="item.meta.icon"/>
-                {{ item.meta.title }}
+                <template v-slot:icon>
+                    <CpIcon :name="item.meta.icon"/>
+                </template>
+
+                <div style="margin-left: 20px;">
+                    {{ item.meta.title }}
+                </div>
             </a-menu-item>
         </template>
     </a-menu>
@@ -56,8 +61,11 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   .cp-icon{
-    margin-right: 14px;
+    // margin-right: 14px;
   }
+}
+.arco-menu-icon{
+  margin-right: 0 !important;
 }
 
 </style>

@@ -1,6 +1,6 @@
 <template>
     <a-layout class="layout">
-        <a-layout-sider collapsible>
+        <a-layout-sider collapsible :width="150">
             <div class="logo"></div>
             <MenuTree />
         </a-layout-sider>
