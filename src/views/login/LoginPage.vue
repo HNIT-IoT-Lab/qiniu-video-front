@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
-import { sendSms, smsLogin } from '@/api/user';
+import { sendSms, smsLogin,postUserInfo } from '@/api/user';
 import { useUserStore } from '@/store/user';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -55,8 +55,10 @@ const sendCode = async () => {
 const getLoginBtn = async () => {
   if (!form.phoneNumber || !form.code) return null;
   const res = await smsLogin(form.phoneNumber, form.code);
+  const res1 = await postUserInfo(form.phoneNumber, form.code)
   console.log('res 登录', res);
   store.setToken(res.token);
+  store.setUserInfo(res1.data)
 
   console.log('route', route.query.returnUrl);
 //   eslint-disable-next-line

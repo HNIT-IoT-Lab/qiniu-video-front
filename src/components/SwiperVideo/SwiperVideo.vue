@@ -9,10 +9,8 @@
                               preload="auto" style="width: 100%;height: 100%;" @mounted="handleMounted" :muted="true" :userActions="{
                                   doubleClick: false
                               }"
-                              :controlBar="{
-                                  fullscreenToggle: false
-                              }
-                              " />
+
+                />
             </swiper-slide>
         </template>
     </swiper>

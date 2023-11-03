@@ -6,29 +6,33 @@
         </a-layout-sider>
         <a-layout>
             <a-layout-header class="layout-header">
-                <div class="header-logo">logo</div>
+                <div class="header-logo" >
+                    <img src="../../assets/img/vedio.png" alt=""/>
+                    <div>vedio</div>
+                </div>
                 <div class="search">
-                    <a-input-search :style="{width:'320px'}" placeholder="Please enter something" search-button>
-                        <template #button-icon>
-                            <!-- <icon-search/> -->
+                    <a-input-search :style="{width:'100%'}" placeholder="试着搜些什么吧"/>
+                </div>
+                <div class="user-info">
+                    <a-image width="50" height="50" :preview="false" :src="avatar" style="border-radius: 50%;">
+                        <template #loader>
+                            <img width="150" :src="avatar" style="filter: blur(5px);border-radius: 50%;" />
                         </template>
-                        <template #button-default>
-                            Search
-                        </template>
-                    </a-input-search>
+                    </a-image>
+                    <span class="user-name">理香</span>
                 </div>
             </a-layout-header>
             <a-layout style="padding: 0 24px;">
                 <a-layout-content class="layout-content">
                     <RouterView/>
                 </a-layout-content>
-                <a-layout-footer style="height: 40px;">Footer</a-layout-footer>
             </a-layout>
         </a-layout>
     </a-layout>
 </template>
 <script setup>
 import MenuTree from '@/components/MenuTree/MenuTree.vue';
+import avatar from '@/assets/img/avatar.jpg';
 import { RouterView } from 'vue-router';
 </script>
 <!-- <script>
@@ -68,11 +72,24 @@ export default defineComponent({
 <style scoped lang="less">
 @nav-size-height: 60px;
 @layout-max-width: 1100px;
+@header-margin: 100px;
+@font-color-2: #666;
+@font-color-3: #999;
+@background-color: #dfecf9;
+
+@font-face {
+     font-family: 'logoFont';
+     src: url('../../assets/font/包图小白体.ttf') format('woff');
+}
+
+   body {
+     font-family: 'CustomFont', Arial, sans-serif;
+   }
 
 .layout {
   width: 100%;
   height: 100%;
-  background: #ecf0f3;
+  background: @background-color;
 }
 
 .layout-navbar {
@@ -86,10 +103,53 @@ export default defineComponent({
 
 .layout-header{
   display: flex;
+  align-items: center;
   padding-left: 20px;
-  height: 66px;
-  line-height: 66px;
-  background: #e1e5e9;
+  height: 70px;
+  line-height: 70px;
+  background: @background-color;
+}
+
+.header-logo{
+  display: flex;
+  margin-left: 20px;
+  margin-right: @header-margin;
+  img{
+    width: 50px;
+    height: 60px;
+  }
+  div{
+    font-family: 'logoFont';
+    color: #9baee1;
+    font-size: 30px;
+    font-weight: 700;
+  }
+}
+
+.search{
+  flex: 1;
+  // max-width: 500px;
+}
+
+:deep(.search .arco-input-wrapper){
+    background-color: rgba(255,255,255,.7);
+}
+:deep(.search .arco-input-wrapper:focus-within){
+    color: #495057;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+  }
+
+.user-info{
+  width: 150px;
+  margin-left: @header-margin;
+  .user-name{
+    margin-left: 10px;
+    font-size: 16px;
+    color: @font-color-2;
+  }
 }
 
 .layout-sider {

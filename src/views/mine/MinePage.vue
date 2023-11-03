@@ -12,7 +12,7 @@ const changeContent = () => {
     <div class="mine-page">
         <a-row class="header">
             <a-col :span="6">
-                <a-image width="150" height="150" :src="avatar" style="border-radius: 50%;">
+                <a-image width="150" height="150" :preview="false" :src="avatar"  style="border-radius: 50%;">
                     <template #loader>
                         <img width="150" :src="avatar" style="filter: blur(5px);border-radius: 50%;" />
                     </template>

@@ -1,9 +1,11 @@
 <template>
-    <a-menu v-for="(value, key) in menuList" :key="key" :selected-keys="currentSelectKeys" :style="{ width: '100%' }"
+    <a-menu v-for="(value, key) in menuList" :key="key"
+            :selected-keys="currentSelectKeys" :style="{ width: '100%' }"
             @menuItemClick="onClickMenuItem">
-        <template v-for="(item, index) in value" :key="item.name">
+        <template v-for="item in value" :key="item">
             <a-menu-item>
-                <CpIcon :name="item.meta.icon"/>
+                <CpIcon v-if="currentSelectKeys[0] === item.name" :name="item.meta.iconfill" />
+                <CpIcon v-else :name="item.meta.icon"/>
                 {{ item.meta.title }}
             </a-menu-item>
         </template>
@@ -20,6 +22,7 @@ import {
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import CpIcon from '../CpIcon/CpIcon.vue';
+const currentSelectKeys = ref(['homePage']);
 const router = useRouter();
 const menuList = computed(() => {
   const menuListTemp = {};
@@ -40,11 +43,11 @@ function updateMenuSelected () {
   currentSelectKeys.value = [router.currentRoute.value.name];
 }
 async function onClickMenuItem (key) {
-  await router.push({ name: key });
+  console.log('key', key);
+  const url = key.name;
+  await router.push({ name: url });
   updateMenuSelected();
 }
-
-const currentSelectKeys = ref(['homePage']);
 
 onMounted(() => {
   updateMenuSelected();
