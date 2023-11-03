@@ -202,5 +202,6 @@ export default defineComponent({
 
 .layout-content {
     display: flex;
+    flex-direction: column;
   }
 </style>
