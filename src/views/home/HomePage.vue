@@ -23,10 +23,10 @@
                     <div>
                         <video-player
                             ref="videoRef"
-                            src="http://vjs.zencdn.net/v/oceans.mp4"
+                            :src="item.urlList[0]"
                             :width="370"
                             :height="((index%2===0)?vedioHeight1:vedioHeight2)-100"
-                            poster="https://p9-pc-sign.douyinpic.com/image-cut-tos-priv/c7c7ff0dbc715f4e91c196974aec2745~tplv-dy-resize-origshort-autoq-75:330.jpeg?biz_tag=pcweb_cover&from=3213915784&s=PackSourceEnum_DOUYIN_WEB_NEW_PAGE&sc=cover&se=false&x-expires=2014416000&x-signature=GS7dC1gBqFm0DqMip%2Ff1digSN24%3D"
+                            :poster="item.poster"
                             controls
                             muted
                             :loop="true"
@@ -36,8 +36,8 @@
                         />
                     </div>
                     <div class="text" style="height: 100px;padding-left: 20px;">
-                        <h3> 谁要的壁纸，专门拍的 </h3>
-                        <p style="margin-top: 20px; color: #999;">来源: 抖音视频</p>
+                        <h3> {{ item.title }} </h3>
+                        <p style="margin-top: 20px; color: #999;">{{ item.content }}</p>
                     </div>
                 </div>
             </template>
@@ -53,47 +53,15 @@ import { ref, shallowRef, onMounted } from 'vue';
 import 'vue-waterfall-plugin-next/dist/style.css';
 import InfiniteLoading from 'v3-infinite-loading';
 import 'v3-infinite-loading/lib/style.css';
+import { getVedeioList } from '@/api/vedio';
 
-const contentList = [{
-  content: '666661'
-}, {
-  content: '666662'
-}, {
-  content: '666663'
-}, {
-  content: '666664'
-}, {
-  content: '666665'
-}, {
-  content: '666666'
-}, {
-  content: '66666'
-}, {
-  content: '66666'
-}, {
-  content: '66666'
-}, {
-  content: '66666'
-}, {
-  content: '66666'
-}, {
-  content: '66666'
-}, {
-  content: '66666'
-}, {
-  content: '66666'
-}, {
-  content: '66666'
-}, {
-  content: '66666'
-}, {
-  content: '66666'
-}, {
-  content: '66666'
-}, {
-  content: '66666'
-}];
+let contentList = []; // 视频数据
+const vedioHeight1 = ref(300);
+const vedioHeight2 = ref(500);
+// const autoPlayIndex = ref('');
+// const timer = '';
 // 18
+// #region
 // const options = reactive({
 //   color: '#dfecf9', // 主题色
 //   muted: true, // 静音
@@ -106,13 +74,57 @@ const contentList = [{
 //   control: false, // 是否显示控制器
 //   title: '' // 视频名称
 // });
-
-const vedioHeight1 = ref(300);
-const vedioHeight2 = ref(500);
-// const autoPlayIndex = ref('');
-// const timer = '';
-
+// #endregion
 const player = shallowRef([]);
+const curPage = ref(1);
+const pageSize = 10;
+
+const getVedioListFn = async () => {
+  // const res = await getVedeioList(curPage.value, pageSize);
+  // contentList = [...contentList, ...res];
+  for (let i = 0; i < 10; i++) {
+    if (i % 2 === 0) {
+      contentList.push({
+        id: 2,
+        isDeleted: 2,
+        createBy: null,
+        createTime: '2023-11-05T15:42:58.246',
+        updateBy: null,
+        updateTime: '2023-11-05T15:42:58.246',
+        title: '风景',
+        author: null,
+        keyWord: null,
+        uid: 4,
+        poster: 'https://p9-pc-sign.douyinpic.com/image-cut-tos-priv/c7c7ff0dbc715f4e91c196974aec2745~tplv-dy-resize-origshort-autoq-75:330.jpeg?biz_tag=pcweb_cover&from=3213915784&s=PackSourceEnum_DOUYIN_WEB_NEW_PAGE&sc=cover&se=false&x-expires=2014416000&x-signature=GS7dC1gBqFm0DqMip%2Ff1digSN24%3D',
+        content: '风景',
+        urlList: [
+          'http://s39y9jpm6.hd-bkt.clouddn.com/hnit-wlwsys/202311051542443409.mp4'
+        ],
+        articleKind: 'VIDEO'
+      });
+    } else {
+      contentList.push({
+        id: 5,
+        isDeleted: 2,
+        createBy: null,
+        createTime: '2023-11-05T17:46:00.077',
+        updateBy: null,
+        updateTime: '2023-11-05T17:46:00.077',
+        title: '自由',
+        author: null,
+        keyWord: null,
+        poster: 'https://p3-pc-sign.douyinpic.com/image-cut-tos-priv/f77d9a8e440f874714c63484a2ab5699~tplv-dy-resize-origshort-autoq-75:330.jpeg?biz_tag=pcweb_cover&from=3213915784&s=PackSourceEnum_DOUYIN_WEB_NEW_PAGE&sc=cover&se=false&x-expires=2014538400&x-signature=HH2JTtFfheGennGG0DGQf1XG%2BWg%3D',
+        uid: 4,
+        content: '向前走就对了',
+        urlList: [
+          'http://s39y9jpm6.hd-bkt.clouddn.com/hnit-wlwsys/202311051745577279.mp4'
+        ],
+        articleKind: 'VIDEO'
+      });
+    }
+  }
+};
+getVedioListFn();
 
 const handleMounted = async (payload) => {
   player.value.push(payload.player);
@@ -125,7 +137,7 @@ const handleEvent = (log) => {
   console.log('Basic player event', log);
 };
 
-const loadData = async $state => {
+const loadData = async ($state) => {
   // 书写add函数
   console.log('底部');
   // calling the api
