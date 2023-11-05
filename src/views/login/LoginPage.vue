@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue';
-import { sendSms, smsLogin,postUserInfo } from '@/api/user';
+import { onMounted, reactive, ref, getCurrentInstance } from 'vue';
+import { postUserInfo, sendSms, smsLogin} from '@/api/user';
 import { useUserStore } from '@/store/user';
 import { useRoute, useRouter } from 'vue-router';
+import { Message } from '@arco-design/web-vue';
 
 const isgx = ref(false); // 大div的类名
 const istxr = ref(false);
@@ -11,7 +12,6 @@ const istxl = ref(false);
 const isz = ref(false);
 const codeDisabled = ref(false); // 验证码按钮禁用
 const isSendCode = ref(false);
-
 const form = reactive({
   phoneNumber: '',
   code: ''
@@ -45,26 +45,29 @@ const sendCode = async () => {
   setTimeout(() => {
     codeDisabled.value = false;
     isSendCode.value = true;
-    console.log('keyi');
+    // console.log('keyi');
   }, 30000);
   //   console.log('form.phoneNumber', form.phoneNumber);
   await sendSms(form.phoneNumber);
   isSendCode.value = true;
 };
+const getUserInfo = async () => {
+  const res = await postUserInfo();
+  console.log('getUserInfo', res);
+  // store.setUserInfo(res1.data);
+  store.setUserInfo(res);
+};
 
 const getLoginBtn = async () => {
-  if (!form.phoneNumber || !form.code) return null;
-  const res = await smsLogin(form.phoneNumber, form.code);
-  const res1 = await postUserInfo(form.phoneNumber, form.code)
-  console.log('res 登录', res);
-  store.setToken(res.token);
-  store.setUserInfo(res1.data)
-
-  console.log('route', route.query.returnUrl);
-//   eslint-disable-next-line
-  router.push({
+    if (!form.phoneNumber || !form.code) return null;
+    const res = await smsLogin(+form.phoneNumber, form.code);  
+    // console.log('res 登录yonghu', res1);
+    Message.success('恭喜您登录成功')
+    store.setToken(res.token);
+    router.push({
     path: (route.query.returnUrl as string) ? (route.query.returnUrl as string) : '/'
   });
+  getUserInfo() 
 };
 
 const getRegisterBtn = (e) => {

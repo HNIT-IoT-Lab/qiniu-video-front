@@ -3,10 +3,11 @@ import { ref } from 'vue';
 
 export const useUserStore = defineStore('user-store', () => {
   const token = ref(''); // 用户token
-  const userInfo = ref('');
+  const userInfo = ref({});
 
   const setToken = (userToken) => {
     token.value = userToken;
+    console.log('userToken', userToken);
     localStorage.setItem('token', userToken);
   };
 
@@ -16,7 +17,9 @@ export const useUserStore = defineStore('user-store', () => {
   };
 
   const setUserInfo = (info) => {
+    console.log('info', info);
     userInfo.value = info;
+    console.log('setOK');
   };
 
   const delUserInfo = () => {

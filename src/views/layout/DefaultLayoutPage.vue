@@ -16,10 +16,10 @@
                 <div class="user-info">
                     <a-image width="50" height="50" :preview="false" :src="avatar" style="border-radius: 50%;">
                         <template #loader>
-                            <img width="150" :src="avatar" style="filter: blur(5px);border-radius: 50%;" />
+                            <img width="150" :src="userInfo?.avatar || avatar" style="filter: blur(5px);border-radius: 50%;" />
                         </template>
                     </a-image>
-                    <span class="user-name">理香</span>
+                    <span class="user-name">{{ userInfo?.userName || '理香' }}</span>
                 </div>
             </a-layout-header>
             <a-layout style="padding: 0 24px;">
@@ -33,7 +33,13 @@
 <script setup>
 import MenuTree from '@/components/MenuTree/MenuTree.vue';
 import avatar from '@/assets/img/avatar.jpg';
+import { ref } from 'vue';
 import { RouterView } from 'vue-router';
+import { useUserStore } from '@/store/user';
+
+const userInfo = ref({});
+const store = useUserStore();
+userInfo.value = store.userInfo;
 </script>
 <!-- <script>
 import { defineComponent, ref } from 'vue';

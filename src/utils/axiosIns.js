@@ -1,3 +1,4 @@
+import { Message } from '@arco-design/web-vue';
 import axios from 'axios';
 // import Vrouter from '@/router';
 // const router = Vrouter;
@@ -6,7 +7,7 @@ const showDebug = true;
 
 const axiosInstance = axios.create({
   baseURL: 'api',
-  timeout: 5 * 1000
+  timeout: 20 * 1000
 });
 function printRequestInfo (config) {
   if (showDebug === true) {
@@ -38,19 +39,25 @@ function printResponseInfo (response) {
 }
 function checkStatusCode (response) {
   const statusCode = response.data.code;
-  if (statusCode === 200) ;
+  // console.log('statusCode', statusCode);
+  // // if (statusCode === 200) ;
+  if (statusCode === -1 || statusCode === 400) {
+    Message.error(response.data.msg);
+    return Promise.reject(new Error(response.data.msg || 'Error'));
+  }
 }
 
 // 添加请求拦截器
 axiosInstance.interceptors.request.use(
   (config) => {
     let authorization = null;
-    authorization = localStorage.getItem('userToken') ? `${localStorage.getItem('userToken')}` : null;
+    authorization = localStorage.getItem('token') ? `${localStorage.getItem('token')}` : null;
     config.headers.userToken = authorization;
     printRequestInfo(config);
     return config;
   },
   (error) => {
+    console.log('超时');
     return Promise.reject(error);
   }
 );
@@ -58,14 +65,21 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => {
     try {
-      checkStatusCode(response);
+      const res = checkStatusCode(response);
+      if (res) {
+        return res;
+      }
     } catch (error) {
+      console.log('捕获错误');
       console.log(response.data);
     }
+    console.log('返回结果');
     printResponseInfo(response);
     return response.data;
   },
   async (error) => {
+    console.log('响应错误');
+    Message.error('网络不佳，请稍后重试');
     return Promise.reject(error);
   }
 );

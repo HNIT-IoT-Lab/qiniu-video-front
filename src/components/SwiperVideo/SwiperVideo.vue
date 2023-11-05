@@ -5,13 +5,12 @@
             @slidePrevTransitionEnd="onSlidePrevTransitionEnd">
         <template v-for="(item, index) in dataArray" :key="index">
             <swiper-slide>
-                <div>{{ index }}</div>
+                <!-- <div>{{ index }}</div> -->
                 <video-player class="swiper-no-swiping" :id="index.toString()" :src="item.url" controls :loop="true"
                               :volume="0.6"
                               preload="auto" style="width: 100%;height: 100%;" @mounted="handleMounted" :muted="true" :userActions="{
                                   doubleClick: false
                               }"
-
                 />
             </swiper-slide>
         </template>

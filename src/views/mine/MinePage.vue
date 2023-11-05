@@ -1,10 +1,12 @@
 <script setup>
 import avatar from '@/assets/img/avatar.jpg';
 import CpIcon from '@/components/CpIcon/CpIcon.vue';
-
-const changeContent = () => {
-
-};
+import { useUserStore } from '@/store/user';
+import { ref } from 'vue';
+const userInfo = ref({});
+const store = useUserStore();
+console.log('mine-store.userInfo', store.userInfo);
+userInfo.value = store.userInfo;
 
 </script>
 
@@ -19,9 +21,9 @@ const changeContent = () => {
                 </a-image>
             </a-col>
             <a-col :span="18" class="user-info">
-                <div class="nickname">理香</div>
+                <div class="nickname">{{ userInfo?.userName ||'理香'}}</div>
                 <div class="userid">用户id: &nbsp;9976543</div>
-                <div class="descript">个人简介</div>
+                <div class="descript">个人简介: <span>{{userInfo?.description || '暂无' }}</span></div>
                 <div class="sex">
                     <CpIcon name="female"/>
                 </div>
