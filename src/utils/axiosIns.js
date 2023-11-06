@@ -6,7 +6,7 @@ import axios from 'axios';
 const showDebug = true;
 
 const axiosInstance = axios.create({
-  baseURL: 'api',
+  baseURL: import.meta.env.VITE_BASE_URL,
   timeout: 20 * 1000
 });
 function printRequestInfo (config) {

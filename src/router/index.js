@@ -8,7 +8,7 @@ Object.keys(modules).forEach((key) => {
   routes.push(...modList);
 });
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes
 });
 router.beforeEach((to, from, next) => {
