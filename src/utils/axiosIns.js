@@ -1,6 +1,6 @@
 import { Message } from '@arco-design/web-vue';
 import axios from 'axios';
-// import Vrouter from '@/router';
+import router from '@/router';
 // const router = Vrouter;
 
 const showDebug = true;
@@ -41,6 +41,9 @@ function checkStatusCode (response) {
   const statusCode = response.data.code;
   // console.log('statusCode', statusCode);
   // // if (statusCode === 200) ;
+  if ( statusCode === 403 ) {
+    router.push("/login").then()
+  }
   if (statusCode === -1 || statusCode === 400) {
     Message.error(response.data.msg);
     return Promise.reject(new Error(response.data.msg || 'Error'));
