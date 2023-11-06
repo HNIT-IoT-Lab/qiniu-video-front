@@ -27,10 +27,10 @@ const router = useRouter();
 const menuList = computed(() => {
   const menuListTemp = {};
   for (let i = 0; i < routes.length; i++) {
-    if (routes[i].children) {
-      if (routes[i].children.length !== 0) {
-        menuListTemp[routes[i].meta.order] = [];
-        for (let j = 0; j < routes[i].children.length; j++) {
+    if (routes[i].children && routes[i].children.length !== 0) {
+      menuListTemp[routes[i].meta.order] = [];
+      for (let j = 0; j < routes[i].children.length; j++) {
+        if (routes[i].children[j].meta) {
           menuListTemp[routes[i].meta.order].push(routes[i].children[j]);
         }
       }

@@ -32,18 +32,6 @@ const DEFAULT = [
         }
       },
       {
-        path: 'following',
-        name: 'followingPage',
-        component: () => import('@/views/home/HomePage.vue'),
-        // role: ["user", "admin"],
-        meta: {
-          title: '关注',
-          order: 2,
-          icon: 'friend_add',
-          iconfill: 'friend_add_fill'
-        }
-      },
-      {
         path: 'mine',
         name: 'minePage',
         component: () => import('@/views/mine/MinePage.vue'),
@@ -53,6 +41,12 @@ const DEFAULT = [
           icon: 'people',
           iconfill: 'people_fill'
         }
+      },
+      {
+        path: 'following',
+        name: 'followingPage',
+        component: () => import('@/views/search/searchPage.vue')
+        // role: ["user", "admin"],
       }
     ]
   },
