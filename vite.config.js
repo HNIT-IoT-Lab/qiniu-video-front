@@ -30,5 +30,9 @@ export default ({ mode }) => defineConfig({
         rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
-  }
+  },
+  outputDir: 'dist',
+  base: mode === 'pro'
+    ? '/qiniu-video-front/'
+    : ''
 });
