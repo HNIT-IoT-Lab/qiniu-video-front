@@ -1,22 +1,20 @@
 <template>
-    <a-spin :loading="loading" tip="正在加载...">
-        <swiper :direction="'vertical'" :slidesPerView="1" :spaceBetween="30" :mousewheel="true" :loop="true"
-                :modules="modules" :allowSlidePrev="(realIndex===0)? false:true"
-                class="my-swiper" :auto-height="true" @swiper="onSwiper" @slideChangeTransitionEnd="onSlideChangeEnd" @slideNextTransitionEnd="onSlideNextTransitionEnd"
-                @slidePrevTransitionEnd="onSlidePrevTransitionEnd">
-            <template v-for="(item, index) in dataArray" :key="index">
-                <swiper-slide>
-                    <!-- <div>{{ index }}</div> -->
-                    <video-player class="swiper-no-swiping" :id="index.toString()" :src="item.url" controls :loop="true"
-                                  :volume="0.6"
-                                  preload="auto" style="width: 100%;height: 100%;" @mounted="handleMounted" :muted="true" :userActions="{
-                                      doubleClick: false
-                                  }"
-                    />
-                </swiper-slide>
-            </template>
-        </swiper>
-    </a-spin>
+    <swiper :direction="'vertical'" :slidesPerView="1" :spaceBetween="30" :mousewheel="true" :loop="true"
+            :modules="modules" :allowSlidePrev="(realIndex===0)? false:true"
+            class="my-swiper" :auto-height="true" @swiper="onSwiper" @slideChangeTransitionEnd="onSlideChangeEnd" @slideNextTransitionEnd="onSlideNextTransitionEnd"
+            @slidePrevTransitionEnd="onSlidePrevTransitionEnd">
+        <template v-for="(item, index) in dataArray" :key="index">
+            <swiper-slide>
+                <!-- <div>{{ index }}</div> -->
+                <video-player class="swiper-no-swiping" :id="index.toString()" :src="item.url" controls :loop="true"
+                              :volume="0.6"
+                              preload="auto" style="width: 100%;height: 100%;" @mounted="handleMounted" :muted="true" :userActions="{
+                                  doubleClick: false
+                              }"
+                />
+            </swiper-slide>
+        </template>
+    </swiper>
 </template>
 <script setup>
 // Import Swiper Vue.js components
@@ -34,13 +32,13 @@ import 'video.js/dist/video-js.css';
 
 // const props = defineProps({ dataArray: Array, previousArray: Array, nextArray: Array });
 const dataArray = ref([]);
-// dataArray.value = [{
-//   url: 'https://vjs.zencdn.net/v/oceans.mp4'
-// }, {
-//   url: 'http://www.w3school.com.cn/example/html5/mov_bbb.mp4'
-// }, {
-//   url: 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4'
-// }];
+dataArray.value = [{
+  url: 'https://vjs.zencdn.net/v/oceans.mp4'
+}, {
+  url: 'http://www.w3school.com.cn/example/html5/mov_bbb.mp4'
+}, {
+  url: 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4'
+}];
 const previousArray = ref([]);
 const nextArray = ref([]);
 nextArray.value = [{
@@ -89,11 +87,12 @@ const getUrlList = async () => {
   // dataArray.value.push({..ids});
   dataArray.value = [...dataArray.value, ...ids];
   // console.log(dataArray.value, '-k');
-  previousArray.value = dataArray.value;
   console.log('dataArray.value', dataArray.value);
+  previousArray.value = dataArray.value;
+  // console.log('dataArray.value', dataArray.value);
   // console.log(previousArray.value, '-k');
   if (theFirstFlag.value) {
-    player.value[0].play();
+    // player.value[0].play();
     theFirstFlag.value = false;
   }
 };
@@ -123,9 +122,10 @@ const onSlideNextTransitionEnd = async (swiper) => {
   // console.log('向后滑动');
   // console.log('previousArray.value', previousArray.value);
 
-  const index1 = dataArray.value.length - 2;
+  const index1 = dataArray.value.length - 1;
   if (swiper.realIndex === index1) {
     //
+    console.log('获取用户信息');
     getUrlList();
   }
   // if ()
