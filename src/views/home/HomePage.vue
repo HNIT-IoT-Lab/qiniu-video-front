@@ -21,6 +21,26 @@
                     <div class="text" style="height: 100px;padding-left: 20px;">
                         <h3> {{ item.title }} </h3>
                         <p style="margin-top: 20px; color: #999;">{{ item.content }}</p>
+                        <p class="likeAndCollect">
+                            <span class="action" key="heart" @click="onLikeChange">
+                                <span v-if="like">
+                                    <IconHeartFill :style="{ color: '#f53f3f' }" />
+                                </span>
+                                <span v-else>
+                                    <IconHeart />
+                                </span>
+                                {{ 83 + (like ? 1 : 0) }}
+                            </span>
+                            <span class="action" key="star" @click="onStarChange">
+                                <span v-if="star">
+                                    <IconStarFill style="{ color: '#ffb400' }" />
+                                </span>
+                                <span v-else>
+                                    <IconStar />
+                                </span>
+                                {{ 3 + (star ? 1 : 0) }}
+                            </span>
+                        </p>
                     </div>
                 </div>
             </template>
@@ -37,6 +57,12 @@ import 'vue-waterfall-plugin-next/dist/style.css';
 import InfiniteLoading from 'v3-infinite-loading';
 import 'v3-infinite-loading/lib/style.css';
 import { getVedeioList } from '@/api/vedio';
+import {
+  IconHeart,
+  IconStar,
+  IconStarFill,
+  IconHeartFill
+} from '@arco-design/web-vue/es/icon';
 
 const contentList = ref([]); // 视频数据
 const vedioHeight1 = ref(300);
@@ -62,6 +88,8 @@ const player = shallowRef([]);
 const curPage = ref(1);
 const pageSize = 10;
 const videoRef = ref('');
+const like = ref(false);
+const star = ref(false);
 
 const getVedioListFn = async (page) => {
   const res = await getVedeioList(page, pageSize);
@@ -76,10 +104,6 @@ const handleMounted = async (payload) => {
   // console.log('Basic player mounted', player.value);
   // console.log('plaer.value[0]', player.value[0]);
   // await player.value[0].play();
-};
-
-const handleEvent = (log) => {
-  // console.log('Basic player event', log);
 };
 
 const loadData = async ($state) => {
@@ -104,6 +128,13 @@ const mouseLeave = (index) => {
   // console.log('222', 222);
   player.value[index].pause();
   clearTimeout(timer);
+};
+
+const onLikeChange = () => {
+  like.value = !like.value;
+};
+const onStarChange = () => {
+  star.value = !star.value;
 };
 
 </script>

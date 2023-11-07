@@ -1,10 +1,10 @@
 import { get } from '@/utils/request';
 /**
 * 搜索页
-* @param keyWord 关键字
+* @param keyword 关键字
 *@returns
  */
-export default async function getSearch (keyWord) {
-  const response = await get('/article/search', { keyWord });
+export default async function getSearch (keyword) {
+  const response = await get('/article/search', { keyword });
   return response;
 }

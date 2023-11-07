@@ -43,8 +43,8 @@ const DEFAULT = [
         }
       },
       {
-        path: 'following',
-        name: 'followingPage',
+        path: 'search',
+        name: 'searchPagePage',
         component: () => import('@/views/search/searchPage.vue')
         // role: ["user", "admin"],
       }
