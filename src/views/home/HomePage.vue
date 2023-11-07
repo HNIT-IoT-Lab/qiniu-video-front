@@ -18,27 +18,27 @@
                             @mouseleave="mouseLeave(index)"
                         />
                     </div>
-                    <div class="text" style="height: 100px;padding-left: 20px;">
+                    <div class="text" style="position: relative;height: 100px;padding-left: 20px;">
                         <h3> {{ item.title }} </h3>
-                        <p style="margin-top: 20px; color: #999;">{{ item.content }}</p>
-                        <p class="likeAndCollect">
+                        <p style=" color: #999;">{{ item.content }}</p>
+                        <p class="likeAndCollect" style="position: absolute;left: 18px;top: 44px;color: #666;font-size: 14px">
                             <span class="action" key="heart" @click="onLikeChange">
                                 <span v-if="like">
-                                    <IconHeartFill :style="{ color: '#f53f3f' }" />
+                                    <IconHeartFill :style="{fontSize: 20, color: '#f53f3f' }" />
                                 </span>
                                 <span v-else>
-                                    <IconHeart />
+                                    <IconHeart :style="{fontSize: 20,color: '#999'}" />
                                 </span>
-                                {{ 83 + (like ? 1 : 0) }}
+                                <span class="count" style="margin-left: 2px;">{{ 83 + (like ? 1 : 0) }}</span>
                             </span>
                             <span class="action" key="star" @click="onStarChange">
                                 <span v-if="star">
-                                    <IconStarFill style="{ color: '#ffb400' }" />
+                                    <IconStarFill :style="{marginLeft: 8,fontSize: 20,transform: 'scale(1.1)', color: '#ffb400' }" />
                                 </span>
                                 <span v-else>
-                                    <IconStar />
+                                    <IconStar :style="{marginLeft: 8,fontSize: 18,transform: 'scale(1.1)',color: '#999'}" />
                                 </span>
-                                {{ 3 + (star ? 1 : 0) }}
+                                <span class="count" style="margin-left: 2px;">{{ 3 + (star ? 1 : 0) }}</span>
                             </span>
                         </p>
                     </div>
