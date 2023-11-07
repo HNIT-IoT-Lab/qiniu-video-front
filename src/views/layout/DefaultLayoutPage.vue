@@ -11,7 +11,8 @@
                     <div>vedio</div>
                 </div>
                 <div class="search">
-                    <a-input-search :style="{width:'100%'}" placeholder="试着搜些什么吧"/>
+                    <a-input-search v-model="searchContent" allow-clear @search="onSearch" @press-enter="onSearch" :style="{width:'100%'}"
+                                    placeholder="试着搜些什么吧"/>
                 </div>
                 <div class="user-info">
                     <a-image width="50" height="50" :preview="false" :src="avatar" style="border-radius: 50%;">
@@ -34,47 +35,28 @@
 import MenuTree from '@/components/MenuTree/MenuTree.vue';
 import avatar from '@/assets/img/avatar.jpg';
 import { ref } from 'vue';
-import { RouterView } from 'vue-router';
+import { RouterView, useRouter } from 'vue-router';
 import { useUserStore } from '@/store/user';
 
 const userInfo = ref({});
 const store = useUserStore();
 userInfo.value = store.userInfo;
-</script>
-<!-- <script>
-import { defineComponent, ref } from 'vue';
-import { Message } from '@arco-design/web-vue';
-import {
-  IconCaretRight,
-  IconCaretLeft,
-  IconHome,
-  IconCalendar
-} from '@arco-design/web-vue/es/icon';
-import { RouterView } from 'vue-router';
 
-export default defineComponent({
-  components: {
-    IconCaretRight,
-    IconCaretLeft,
-    IconHome,
-    IconCalendar,
-    RouterView
-  },
-  setup () {
-    const collapsed = ref(false);
-    const onCollapse = () => {
-      collapsed.value = !collapsed.value;
-    };
-    return {
-      collapsed,
-      onCollapse,
-      onClickMenuItem (key) {
-        Message.info({ content: `You select ${key}`, showIcon: true });
-      }
-    };
-  }
-});
-</script> -->
+const searchContent = ref('');
+
+const router = useRouter();
+const onSearch = () => {
+  console.log('searchContent', searchContent.value);
+  router.push({
+    path: '/search',
+    query: {
+      content: searchContent.value
+    },
+    replace: true
+  });
+  searchContent.value = '';
+};
+</script>
 <style scoped lang="less">
 @nav-size-height: 60px;
 @layout-max-width: 1100px;

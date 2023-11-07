@@ -49,7 +49,7 @@ const sendCode = async () => {
   }, 30000);
   //   console.log('form.phoneNumber', form.phoneNumber);
   await sendSms(form.phoneNumber);
-  isSendCode.value = true;
+  isSendCode.value = false;
 };
 const getUserInfo = async () => {
   const res = await postUserInfo();

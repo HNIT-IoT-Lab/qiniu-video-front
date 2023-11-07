@@ -80,10 +80,36 @@ axiosInstance.interceptors.response.use(
     printResponseInfo(response);
     return response.data;
   },
-  async (error) => {
-    console.log('响应错误');
-    Message.error('网络不佳，请稍后重试');
-    return Promise.reject(error);
+  // async (error) => {
+  //   console.log('响应错误');
+  //   Message.error('网络不佳，请稍后重试');
+  //   return Promise.reject(error);
+  // }
+  function axiosRetryInterceptor (res) {
+    console.log('重发1');
+    const config = res.config;
+    // 如果配置不存在或重试属性未设置，抛出promise错误
+    if (!config || !config.retry) return Promise.reject(res);
+    // 设置一个变量记录重新请求的次数
+    config.retryCount = config.retryCount || 0;
+    // 检查重新请求的次数是否超过我们设定的请求次数
+    if (config.retryCount >= config.retry) {
+      return Promise.reject(res);
+    }
+    // 重新请求的次数自增
+    config.retryCount += 1;
+    // 创建新的Promise来处理重新请求的间隙
+    console.log('重发2');
+    const back = new Promise(function (resolve) {
+      console.log('接口' + config.url + '请求超时，重新请求');
+      setTimeout(function () {
+        resolve();
+      }, config.retryInterval || 1);
+    });
+    // 返回axios的实体，重试请求
+    return back.then(function () {
+      return axiosInstance(config);
+    });
   }
 );
 export default axiosInstance;

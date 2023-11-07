@@ -1,13 +1,28 @@
 <script setup>
 import avatar from '@/assets/img/avatar.jpg';
 import CpIcon from '@/components/CpIcon/CpIcon.vue';
+import { Waterfall } from 'vue-waterfall-plugin-next';
 import { useUserStore } from '@/store/user';
-import { ref } from 'vue';
-const userInfo = ref({});
-const store = useUserStore();
-console.log('mine-store.userInfo', store.userInfo);
-userInfo.value = store.userInfo;
+import { VideoPlayer } from '@videojs-player/vue';
+import 'video.js/dist/video-js.css';
+import { ref, shallowRef } from 'vue';
+import 'vue-waterfall-plugin-next/dist/style.css';
+import { getCollectArticle } from '@/api/vedio';
+// const userInfo = ref({});
+// const store = useUserStore();
+// console.log('mine-store.userInfo', store.userInfo);
+// userInfo.value = store.userInfo;
 
+const contentList = ref([]); // 视频数据
+const vedioHeight1 = ref(300);
+const vedioHeight2 = ref(300);
+
+const getCollection = async () => {
+  const res = await getCollectArticle();
+  console.log('res', res);
+  contentList.value = res;
+};
+getCollection();
 </script>
 
 <template>
@@ -36,11 +51,33 @@ userInfo.value = store.userInfo;
         </a-row>
         <div class="content">
             <a-tabs @tab-click="changeContent" type="rounded" size="large"  :animation="true">
-                <a-tab-pane key="1" title="发布">
-                    发布的内容
+                <a-tab-pane key="2" title="收藏视频">
+                    <Waterfall :list="contentList" :width="370" style="">
+                        <template #item="{ item, url, index }">
+                            <div class="card" :style="{'height':(index%2===0)? `${vedioHeight1}px`:`${vedioHeight2}px`}" style="background-color:#dfecf9;border-radius: 14px;">
+                                <div>
+                                    <video-player
+                                        ref="videoRef"
+                                        :src="item.urlList[0]"
+                                        :width="370"
+                                        :height="((index%2===0)?vedioHeight1:vedioHeight2)-100"
+                                        :poster="item.poster"
+                                        controls
+                                        :loop="true"
+                                        :volume="0.6"
+                                        @mounted="handleMounted"
+                                    />
+                                </div>
+                                <div class="text" style="height: 100px;padding-left: 20px;">
+                                    <h3> {{ item.title }} </h3>
+                                    <p style="margin-top: 20px; color: #999;">{{ item.content }}</p>
+                                </div>
+                            </div>
+                        </template>
+                    </Waterfall>
                 </a-tab-pane>
-                <a-tab-pane key="2" title="点赞">
-                    点赞的内容
+                <a-tab-pane key="1" title="关注列表">
+                    暂无关注
                 </a-tab-pane>
             </a-tabs>
         </div>

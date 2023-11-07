@@ -1,21 +1,4 @@
 <template>
-    <!-- <div style="width: 370px;
-  height:600px;background-color: #333;">
-        <video-player
-            ref="veo"
-            class="testPlay"
-            src="http://vjs.zencdn.net/v/oceans.mp4"
-            poster="https://p9-pc-sign.douyinpic.com/image-cut-tos-priv/c7c7ff0dbc715f4e91c196974aec2745~tplv-dy-resize-origshort-autoq-75:330.jpeg?biz_tag=pcweb_cover&from=3213915784&s=PackSourceEnum_DOUYIN_WEB_NEW_PAGE&sc=cover&se=false&x-expires=2014416000&x-signature=GS7dC1gBqFm0DqMip%2Ff1digSN24%3D"
-            width="370"
-            height="500"
-            controls
-            :control="false"
-            :loop="true"
-            :volume="0.6"
-            @mounted="handleMounted"
-            @ready="handleEvent($event)"
-        />
-    </div> -->
     <div class="home-page">
         <Waterfall :list="contentList" :width="370" style="">
             <template #item="{ item, url, index }">
@@ -28,16 +11,36 @@
                             :height="((index%2===0)?vedioHeight1:vedioHeight2)-100"
                             :poster="item.poster"
                             controls
-                            muted
                             :loop="true"
                             :volume="0.6"
-                            @mouseover="mouseOver(index)"
-                            @mouseleave="mouseLeave"
+                            @mounted="handleMounted"
+                            @mouseenter="mouseEnter(index)"
+                            @mouseleave="mouseLeave(index)"
                         />
                     </div>
-                    <div class="text" style="height: 100px;padding-left: 20px;">
+                    <div class="text" style="position: relative;height: 100px;padding-left: 20px;">
                         <h3> {{ item.title }} </h3>
-                        <p style="margin-top: 20px; color: #999;">{{ item.content }}</p>
+                        <p style=" color: #999;">{{ item.content }}</p>
+                        <p class="likeAndCollect" style="position: absolute;left: 18px;top: 44px;color: #666;font-size: 14px">
+                            <span class="action" key="heart" @click="onLikeChange(item.id,item?.islike)">
+                                <span v-if="item?.islike">
+                                    <IconHeartFill :style="{fontSize: 20, color: '#f53f3f' }" />
+                                </span>
+                                <span v-else>
+                                    <IconHeart :style="{fontSize: 20,color: '#999'}" />
+                                </span>
+                                <span class="count" style="margin-left: 2px;">{{ item.likeCounts }}</span>
+                            </span>
+                            <span class="action" key="star" @click="onStarChange(item.id,item?.isCollect)">
+                                <span v-if="item?.isCollect">
+                                    <IconStarFill :style="{marginLeft: 8,fontSize: 20,transform: 'scale(1.1)', color: '#ffb400' }" />
+                                </span>
+                                <span v-else>
+                                    <IconStar :style="{marginLeft: 8,fontSize: 18,transform: 'scale(1.1)',color: '#999'}" />
+                                </span>
+                                <span class="count" style="margin-left: 2px;">{{ item.collectionCounts }}</span>
+                            </span>
+                        </p>
                     </div>
                 </div>
             </template>
@@ -46,20 +49,27 @@
     </div>
 </template>
 <script setup>
-import { LazyImg, Waterfall } from 'vue-waterfall-plugin-next';
+import { Waterfall } from 'vue-waterfall-plugin-next';
 import { VideoPlayer } from '@videojs-player/vue';
 import 'video.js/dist/video-js.css';
 import { ref, shallowRef, onMounted } from 'vue';
 import 'vue-waterfall-plugin-next/dist/style.css';
 import InfiniteLoading from 'v3-infinite-loading';
 import 'v3-infinite-loading/lib/style.css';
-import { getVedeioList } from '@/api/vedio';
+import { getVedeioList, startOrCollectArticle } from '@/api/vedio';
+import {
+  IconHeart,
+  IconStar,
+  IconStarFill,
+  IconHeartFill
+} from '@arco-design/web-vue/es/icon';
+;
 
 const contentList = ref([]); // 视频数据
 const vedioHeight1 = ref(300);
-const vedioHeight2 = ref(500);
+const vedioHeight2 = ref(300);
 // const autoPlayIndex = ref('');
-// const timer = '';
+let timer = '';
 // 18
 // #region
 // const options = reactive({
@@ -78,6 +88,9 @@ const vedioHeight2 = ref(500);
 const player = shallowRef([]);
 const curPage = ref(1);
 const pageSize = 10;
+const videoRef = ref('');
+// const like = ref([]);
+// const star = ref([]);
 
 const getVedioListFn = async (page) => {
   const res = await getVedeioList(page, pageSize);
@@ -89,13 +102,9 @@ getVedioListFn(curPage.value);
 
 const handleMounted = async (payload) => {
   player.value.push(payload.player);
-  console.log('Basic player mounted', player.value);
+  // console.log('Basic player mounted', player.value);
   // console.log('plaer.value[0]', player.value[0]);
   // await player.value[0].play();
-};
-
-const handleEvent = (log) => {
-  console.log('Basic player event', log);
 };
 
 const loadData = async ($state) => {
@@ -105,19 +114,38 @@ const loadData = async ($state) => {
   // 书写add函数
   // calling the api
 };
-
-const mouseOver = async (index) => {
-  // console.log('videoRef', 111);
-  // timer = setTimeout(() => {
-  //   // autoPlayIndex.value = index;
-  //   console.log('222', 222);
-  // }, 1500);
+//  ref 是用来获取属性的
+const mouseEnter = (index) => {
+  // console.log('videoRef', videoRef.value);
+  timer = setTimeout(() => {
+    // autoPlayIndex.value = index;
+    player.value[index].play();
+    console.log('222', 222);
+  }, 1500);
   // // await player.value[0].play();
 };
 
-const mouseLeave = () => {
-  // clearTimeout(timer);
+const mouseLeave = (index) => {
   // console.log('222', 222);
+  player.value[index].pause();
+  clearTimeout(timer);
+};
+
+const onLikeChange = async (id, isLike) => {
+  // like.value = !like.value;
+  isLike = !isLike;
+  const res = await startOrCollectArticle(id, 'COLLECTION', isLike);
+  console.log('res', res);
+  getVedioListFn();
+};
+const onStarChange = async (id, isCollect) => {
+  // star.value = !star.value;
+  // console.log('item222', item);
+  // console.log('item.id', item.id);
+  isCollect = !isCollect;
+  const res = await startOrCollectArticle(id, 'COLLECTION', isCollect);
+  console.log('res', res);
+  getVedioListFn();
 };
 
 </script>
