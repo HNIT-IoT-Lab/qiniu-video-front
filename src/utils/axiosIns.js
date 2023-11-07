@@ -41,8 +41,8 @@ function checkStatusCode (response) {
   const statusCode = response.data.code;
   // console.log('statusCode', statusCode);
   // // if (statusCode === 200) ;
-  if ( statusCode === 403 ) {
-    router.push("/login").then()
+  if (statusCode === 403) {
+    router.push('/login').then();
   }
   if (statusCode === -1 || statusCode === 400) {
     Message.error(response.data.msg);
