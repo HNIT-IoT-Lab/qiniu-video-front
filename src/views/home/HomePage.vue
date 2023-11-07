@@ -6,10 +6,10 @@
                     <div>
                         <video-player
                             ref="videoRef"
-                            :src="item.urlList[0]"
+                            :src="item.urlList[0].replace('https://', 'http://')"
                             :width="370"
                             :height="((index%2===0)?vedioHeight1:vedioHeight2)-100"
-                            :poster="item.poster"
+                            :poster="item.cover"
                             controls
                             :loop="true"
                             :volume="0.6"
