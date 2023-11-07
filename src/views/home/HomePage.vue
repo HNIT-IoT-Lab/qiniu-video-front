@@ -22,23 +22,23 @@
                         <h3> {{ item.title }} </h3>
                         <p style=" color: #999;">{{ item.content }}</p>
                         <p class="likeAndCollect" style="position: absolute;left: 18px;top: 44px;color: #666;font-size: 14px">
-                            <span class="action" key="heart" @click="onLikeChange">
-                                <span v-if="like">
+                            <span class="action" key="heart" @click="onLikeChange(item.id,item?.islike)">
+                                <span v-if="item?.islike">
                                     <IconHeartFill :style="{fontSize: 20, color: '#f53f3f' }" />
                                 </span>
                                 <span v-else>
                                     <IconHeart :style="{fontSize: 20,color: '#999'}" />
                                 </span>
-                                <span class="count" style="margin-left: 2px;">{{ 83 + (like ? 1 : 0) }}</span>
+                                <span class="count" style="margin-left: 2px;">{{ item.likeCounts }}</span>
                             </span>
-                            <span class="action" key="star" @click="onStarChange">
-                                <span v-if="star">
+                            <span class="action" key="star" @click="onStarChange(item.id,item?.isCollect)">
+                                <span v-if="item?.isCollect">
                                     <IconStarFill :style="{marginLeft: 8,fontSize: 20,transform: 'scale(1.1)', color: '#ffb400' }" />
                                 </span>
                                 <span v-else>
                                     <IconStar :style="{marginLeft: 8,fontSize: 18,transform: 'scale(1.1)',color: '#999'}" />
                                 </span>
-                                <span class="count" style="margin-left: 2px;">{{ 3 + (star ? 1 : 0) }}</span>
+                                <span class="count" style="margin-left: 2px;">{{ item.collectionCounts }}</span>
                             </span>
                         </p>
                     </div>
@@ -49,20 +49,21 @@
     </div>
 </template>
 <script setup>
-import { LazyImg, Waterfall } from 'vue-waterfall-plugin-next';
+import { Waterfall } from 'vue-waterfall-plugin-next';
 import { VideoPlayer } from '@videojs-player/vue';
 import 'video.js/dist/video-js.css';
 import { ref, shallowRef, onMounted } from 'vue';
 import 'vue-waterfall-plugin-next/dist/style.css';
 import InfiniteLoading from 'v3-infinite-loading';
 import 'v3-infinite-loading/lib/style.css';
-import { getVedeioList } from '@/api/vedio';
+import { getVedeioList, startOrCollectArticle } from '@/api/vedio';
 import {
   IconHeart,
   IconStar,
   IconStarFill,
   IconHeartFill
 } from '@arco-design/web-vue/es/icon';
+;
 
 const contentList = ref([]); // 视频数据
 const vedioHeight1 = ref(300);
@@ -88,8 +89,8 @@ const player = shallowRef([]);
 const curPage = ref(1);
 const pageSize = 10;
 const videoRef = ref('');
-const like = ref(false);
-const star = ref(false);
+// const like = ref([]);
+// const star = ref([]);
 
 const getVedioListFn = async (page) => {
   const res = await getVedeioList(page, pageSize);
@@ -130,11 +131,21 @@ const mouseLeave = (index) => {
   clearTimeout(timer);
 };
 
-const onLikeChange = () => {
-  like.value = !like.value;
+const onLikeChange = async (id, isLike) => {
+  // like.value = !like.value;
+  isLike = !isLike;
+  const res = await startOrCollectArticle(id, 'COLLECTION', isLike);
+  console.log('res', res);
+  getVedioListFn();
 };
-const onStarChange = () => {
-  star.value = !star.value;
+const onStarChange = async (id, isCollect) => {
+  // star.value = !star.value;
+  // console.log('item222', item);
+  // console.log('item.id', item.id);
+  isCollect = !isCollect;
+  const res = await startOrCollectArticle(id, 'COLLECTION', isCollect);
+  console.log('res', res);
+  getVedioListFn();
 };
 
 </script>
